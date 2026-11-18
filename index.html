@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#772b39">
+<meta name="description" content="Independent reporting and explainers on Pakistan, the world, politics, business, technology, climate, culture and sport. Headlines update live from public news feeds.">
+<title>The Current Canvas</title>
+<link rel="icon" href="brand/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="utility-bar"><div class="wrap utility-inner">
+  <span>Independent journalism, wider perspective</span>
+  <span id="clock">—</span>
+</div></div>
+
+<header class="site-header wrap">
+  <a class="brand-link" href="#/" aria-label="The Current Canvas home"><img src="brand/masthead.svg" width="820" height="220" alt="The Current Canvas"></a>
+  <div class="header-right"><span>Pakistan • World • Beyond</span><a href="#/advertise">Advertise with us</a></div>
+</header>
+
+<nav class="nav-bar" aria-label="Primary navigation">
+  <div class="wrap nav-inner">
+    <a href="#/" class="nav-home" data-id="home">Home</a>
+    <div class="nav-sections" id="nav"></div>
+    <a class="nav-search" href="#/search" data-id="search" aria-label="Search headlines">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg>
+    </a>
+  </div>
+</nav>
+
+<div class="ticker" role="region" aria-label="Latest news">
+  <div class="wrap ticker-inner">
+    <span class="ticker-label">Latest</span>
+    <input class="ticker-pause" type="checkbox" id="ticker-pause" aria-label="Pause headline scrolling">
+    <div class="ticker-window"><div class="ticker-track" id="ticker"></div></div>
+    <label class="ticker-control" for="ticker-pause" title="Pause / play">❚❚</label>
+  </div>
+</div>
+
+<main class="wrap" id="main" aria-live="polite">
+  <p class="topic-empty">Loading the latest headlines…</p>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-top">
+    <div>
+      <img src="brand/masthead.svg" width="820" height="220" alt="The Current Canvas">
+      <p>Independent reporting for a changing world.</p>
+      <p class="live-line"><span id="dot" class="live-dot"></span><span id="status">Connecting…</span> <button id="refresh" type="button">Refresh</button></p>
+    </div>
+    <div><h2>Explore</h2><div class="footer-links" id="foot-nav"></div></div>
+    <div><h2>About &amp; contact</h2><div class="footer-links">
+      <a href="#/about">About</a><a href="#/contact">Contact Us</a><a href="#/advertise">Advertise With Us</a>
+      <a href="#/editorial-policy">Editorial Policy</a><a href="#/corrections-policy">Corrections Policy</a><a href="#/source-verification-policy">Source &amp; Verification Policy</a>
+      <a href="#/ai-usage-policy">AI Usage Policy</a><a href="#/copyright-policy">Copyright Policy</a>
+    </div></div>
+    <div><h2>Policies</h2><div class="footer-links">
+      <a href="#/privacy-policy">Privacy Policy</a><a href="#/terms-of-use">Terms of Use</a><a href="#/cookie-policy">Cookie Policy</a>
+      <a href="#/disclaimer">Disclaimer</a><a href="#/community-guidelines">Community Guidelines</a><a href="#/advertising-policy">Advertising Policy</a>
+      <a href="#/terms-and-conditions">Terms and Conditions</a><a href="#/user-agreement">User Agreement</a>
+    </div></div>
+  </div>
+  <div class="wrap footer-bottom">
+    <span>© <span id="yr"></span> The Current Canvas. Source material credited within each story.</span>
+    <span>Original articles and data briefs written by The Current Canvas desk.</span>
+  </div>
+</footer>
+
+<script src="pages.js"></script>
+<script src="originals.js"></script>
+<script src="generated.js"></script>
+<script src="news.js" onerror="void 0"></script>
+<script src="app.js"></script>
+</body>
+</html>

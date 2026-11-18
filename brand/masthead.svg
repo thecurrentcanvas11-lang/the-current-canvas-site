@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="220" viewBox="0 0 820 220" role="img" aria-labelledby="title desc">
+  <title id="title">The Current Canvas</title>
+  <desc id="desc">Two open concentric C shapes form a modern current symbol, beside a bold navy wordmark and burgundy editorial tagline.</desc>
+  <g fill="none" stroke-linecap="square">
+    <path d="M142 50A76 76 0 1 0 142 170" stroke="#14202b" stroke-width="20"/>
+    <path d="M119 78A41 41 0 1 0 119 142" stroke="#913746" stroke-width="16"/>
+    <path d="M123 110h44" stroke="#913746" stroke-width="16"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="212" y="55" fill="#913746" font-size="24" font-weight="700" letter-spacing="8">THE</text>
+    <text x="207" y="130" fill="#14202b" font-size="81" font-weight="700" letter-spacing="-3.5">Current Canvas</text>
+    <text x="212" y="178" fill="#913746" font-size="19" font-weight="600" letter-spacing="3.8">YOUR GATEWAY TO INFORMED INSIGHTS</text>
+  </g>
+</svg>

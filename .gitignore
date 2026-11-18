@@ -1,0 +1,7 @@
+# rebuilt on every run by the workflow, not stored in git
+news.json
+news.js
+# local logs and tools
+scripts/writer.log
+.claude/
+_site/
