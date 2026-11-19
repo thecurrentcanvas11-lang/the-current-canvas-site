@@ -12,7 +12,8 @@
 #   * Articles are labelled AI-assisted and list their reporting basis on the site.
 # API key: environment variable ANTHROPIC_API_KEY, or the encrypted file made by scripts\set-api-key.ps1.
 # ASCII only in this file on purpose (Windows PowerShell 5.1 reads BOM-less files as ANSI).
-param([switch]$DryRun, [switch]$SelfTest, [string]$OutDir = '')
+#   -Today : consider every story published since midnight Pakistan time and take the NEWEST first
+param([switch]$DryRun, [switch]$SelfTest, [switch]$Today, [string]$OutDir = '')
 
 $ErrorActionPreference = 'Continue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -75,6 +76,9 @@ $skipFormat = '(^|\s)live(\s|:|$)|\blive\b.*[-:]|\|\s|podcast|quiz|crossword|hor
 
 function Get-Candidates {
   $cutoff = [DateTimeOffset]::UtcNow.AddHours(-$MaxAgeHours).ToUnixTimeMilliseconds()
+  if ($Today) {   # midnight in Pakistan (UTC+5), expressed in UTC
+    $cutoff = ([DateTimeOffset]::new([DateTime]::UtcNow.AddHours(5).Date.AddHours(-5), [TimeSpan]::Zero)).ToUnixTimeMilliseconds()
+  }
   $out = @()
   foreach ($f in $Feeds) {
     try {
@@ -97,10 +101,10 @@ function Get-Candidates {
 }
 
 # ----- state -----
-$today = [DateTime]::UtcNow.ToString('yyyy-MM-dd')
-$state = @{ day = $today; count = 0; used = @() }
+$dayUtc = [DateTime]::UtcNow.ToString('yyyy-MM-dd')
+$state = @{ day = $dayUtc; count = 0; used = @() }
 if (Test-Path $statePath) { try { $s = Get-Content $statePath -Raw -Encoding UTF8 | ConvertFrom-Json; $state = @{ day = $s.day; count = [int]$s.count; used = @($s.used) } } catch {} }
-if ($state.day -ne $today) { $state.day = $today; $state.count = 0 }
+if ($state.day -ne $dayUtc) { $state.day = $dayUtc; $state.count = 0 }
 if (-not $SelfTest -and -not $DryRun -and $state.count -ge $MaxPerDay) { Log "daily cap reached ($MaxPerDay); stopping"; exit 0 }
 
 # ----- API key (not needed for -DryRun / -SelfTest) -----
@@ -124,7 +128,8 @@ $cands = @($cands | Where-Object { $c = $_; -not ($existingTok | Where-Object { 
 if ($cands.Count -eq 0) { Log 'all candidates already covered'; exit 0 }
 $scored = foreach ($c in ($cands | Sort-Object time -Descending | Select-Object -First 30)) {
   $rel = @($cands | Where-Object { $_.link -ne $c.link -and $_.source -ne $c.source -and (Get-Overlap $c.tok $_.tok) -ge 3 } | Select-Object -First 2)
-  [pscustomobject]@{ c = $c; rel = $rel; score = ([math]::Min($rel.Count, 2) * 1000000000000 + $c.time) }
+  $sc = if ($Today) { $c.time } else { [math]::Min($rel.Count, 2) * 1000000000000 + $c.time }
+  [pscustomobject]@{ c = $c; rel = $rel; score = $sc }
 }
 $pick = $scored | Sort-Object score -Descending | Select-Object -First 1
 $notes = @($pick.c) + @($pick.rel)

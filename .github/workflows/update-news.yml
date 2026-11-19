@@ -11,6 +11,14 @@ on:
   schedule:
     - cron: '*/5 * * * *'     # GitHub may delay scheduled runs by a few minutes at busy times
   workflow_dispatch:
+    inputs:
+      count:
+        description: 'How many articles to write in this run (the 60-per-day cap still applies)'
+        default: '1'
+      today:
+        description: 'Cover every story since midnight Pakistan time, newest first'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths-ignore: ['generated.js', 'images/g-*', 'scripts/writer-state.json']
@@ -36,12 +44,24 @@ jobs:
         shell: pwsh
         run: ./scripts/fetch-news.ps1
 
-      - name: Write one original article
+      - name: Write original articles
         shell: pwsh
         continue-on-error: true
+        timeout-minutes: 90
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: ./scripts/write-articles.ps1
+          COUNT: ${{ github.event.inputs.count }}
+          TODAY: ${{ github.event.inputs.today }}
+        run: |
+          $n = 1; [int]::TryParse("$env:COUNT", [ref]$n) | Out-Null; if ($n -lt 1) { $n = 1 }
+          $extra = @(); if ($env:TODAY -eq 'true') { $extra = @('-Today') }
+          for ($k = 1; $k -le $n; $k++) {
+            Write-Host "=== article $k of up to $n ==="
+            ./scripts/write-articles.ps1 @extra
+            if ($LASTEXITCODE -ne 0) { Write-Host 'stopping: writer error'; break }
+            $last = Get-Content scripts/writer.log -Tail 1
+            if ($last -match 'no fresh candidates|daily cap reached|all candidates already covered|no API key') { Write-Host "stopping: $last"; break }
+          }
 
       - name: Commit new article, photo and writer state (only if changed)
         run: |
